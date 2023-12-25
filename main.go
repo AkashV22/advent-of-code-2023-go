@@ -12,9 +12,10 @@ import (
 )
 
 type solverInfo struct {
-	day    int
-	puzzle int
-	solver func(*bufio.Scanner) (string, error)
+	day       int
+	puzzle    int
+	inputPath string
+	solver    func(*bufio.Scanner) (string, error)
 }
 
 func solvePuzzles(solvers []solverInfo) func(http.ResponseWriter, *http.Request) {
@@ -23,7 +24,7 @@ func solvePuzzles(solvers []solverInfo) func(http.ResponseWriter, *http.Request)
 		results := make(map[string]string)
 
 		for _, solverInfo := range solvers {
-			file, err := os.Open("day01/input1.txt")
+			file, err := os.Open(solverInfo.inputPath)
 			defer file.Close()
 
 			lines := bufio.NewScanner(file)
@@ -54,7 +55,7 @@ func solvePuzzles(solvers []solverInfo) func(http.ResponseWriter, *http.Request)
 
 func main() {
 	solvers := []solverInfo{
-		{day: 1, puzzle: 1, solver: day01.SolvePuzzle1},
+		{day: 1, puzzle: 1, inputPath: "day01/input1.txt", solver: day01.SolvePuzzle1},
 	}
 
 	http.HandleFunc("/", solvePuzzles(solvers))
