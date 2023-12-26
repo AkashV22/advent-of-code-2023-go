@@ -66,26 +66,26 @@ func getCalculationValue(line string, includeDigitWords bool) (int, error) {
 	return builder.build()
 }
 
-func solvePuzzle(lines *bufio.Scanner, includeDigitWords bool) (string, error) {
+func solvePuzzle(lines *bufio.Scanner, includeDigitWords bool) (int, error) {
 	sum := 0
 
 	for lines.Scan() {
 		calculationValue, err := getCalculationValue(lines.Text(), includeDigitWords)
 
 		if err != nil {
-			return "", err
+			return 0, err
 		}
 
 		sum += calculationValue
 	}
 
-	return strconv.Itoa(sum), nil
+	return sum, nil
 }
 
-func SolvePuzzle1(lines *bufio.Scanner) (string, error) {
+func SolvePuzzle1(lines *bufio.Scanner) (int, error) {
 	return solvePuzzle(lines, false)
 }
 
-func SolvePuzzle2(lines *bufio.Scanner) (string, error) {
+func SolvePuzzle2(lines *bufio.Scanner) (int, error) {
 	return solvePuzzle(lines, true)
 }

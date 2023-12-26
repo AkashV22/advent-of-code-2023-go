@@ -15,13 +15,13 @@ type solverInfo struct {
 	day       int
 	puzzle    int
 	inputPath string
-	solver    func(*bufio.Scanner) (string, error)
+	solver    func(*bufio.Scanner) (int, error)
 }
 
 func solvePuzzles(solvers []solverInfo) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		results := make(map[string]string)
+		results := make(map[string]int)
 
 		for _, solverInfo := range solvers {
 			file, err := os.Open(solverInfo.inputPath)

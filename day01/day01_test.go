@@ -6,9 +6,9 @@ import (
 	"testing"
 )
 
-func doTestSolvePuzzle(t *testing.T, puzzle int, expected string) {
+func doTestSolvePuzzle(t *testing.T, puzzle int, expected int) {
 	var inputPath string
-	var solvePuzzle func(*bufio.Scanner) (string, error)
+	var solvePuzzle func(*bufio.Scanner) (int, error)
 	switch puzzle {
 	case 1:
 		inputPath = "example1.txt"
@@ -29,7 +29,7 @@ func doTestSolvePuzzle(t *testing.T, puzzle int, expected string) {
 
 	lines := bufio.NewScanner(file)
 
-	var result string
+	var result int
 	result, err = solvePuzzle(lines)
 
 	if err != nil {
@@ -42,9 +42,9 @@ func doTestSolvePuzzle(t *testing.T, puzzle int, expected string) {
 }
 
 func TestSolvePuzzle1(t *testing.T) {
-	doTestSolvePuzzle(t, 1, "142")
+	doTestSolvePuzzle(t, 1, 142)
 }
 
 func TestSolvePuzzle2(t *testing.T) {
-	doTestSolvePuzzle(t, 2, "281")
+	doTestSolvePuzzle(t, 2, 281)
 }
