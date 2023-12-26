@@ -17,7 +17,7 @@ type calculationValueBuilder struct {
 func (b calculationValueBuilder) init(line string) calculationValueBuilder {
 	b.line = line
 	b.indexOfFirst = len(line)
-	b.indexOfLast = 0
+	b.indexOfLast = -1
 	return b
 }
 
