@@ -3,25 +3,27 @@ package day01
 import (
 	"bufio"
 	"strconv"
-	"unicode"
+	"strings"
 )
 
 func getCalculationValue(line string) (int, error) {
-	firstAssigned := false
-	var first string
-	var last string
-	for _, ch := range line {
-		if !unicode.IsDigit(ch) {
-			continue
+	var first, last string
+	indexOfFirst, indexOfLast := len(line), -1
+
+	for i := 0; i < 10; i++ {
+		iAsString := strconv.Itoa(i)
+
+		if index := strings.Index(line, iAsString); index >= 0 && index < indexOfFirst {
+			indexOfFirst = index
+			first = iAsString
 		}
 
-		if !firstAssigned {
-			first = string(ch)
-			firstAssigned = true
+		if index := strings.LastIndex(line, iAsString); index >= 0 && index > indexOfLast {
+			indexOfLast = index
+			last = iAsString
 		}
-
-		last = string(ch)
 	}
+
 	return strconv.Atoi(first + last)
 }
 
