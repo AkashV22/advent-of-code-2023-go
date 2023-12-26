@@ -56,6 +56,7 @@ func solvePuzzles(solvers []solverInfo) func(http.ResponseWriter, *http.Request)
 func main() {
 	solvers := []solverInfo{
 		{day: 1, puzzle: 1, inputPath: "day01/input.txt", solver: day01.SolvePuzzle1},
+		{day: 1, puzzle: 2, inputPath: "day01/input.txt", solver: day01.SolvePuzzle2},
 	}
 
 	http.HandleFunc("/", solvePuzzles(solvers))
