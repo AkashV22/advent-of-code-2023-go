@@ -6,6 +6,37 @@ import (
 	"strings"
 )
 
+type calculationValueBuilder struct {
+	line         string
+	first        string
+	last         string
+	indexOfFirst int
+	indexOfLast  int
+}
+
+func (b calculationValueBuilder) init(line string) calculationValueBuilder {
+	b.line = line
+	b.indexOfFirst = len(line)
+	b.indexOfLast = 0
+	return b
+}
+
+func (b *calculationValueBuilder) findAndUpdate(valueToFind, valueToUpdateWith string) {
+	if index := strings.Index(b.line, valueToFind); index >= 0 && index < b.indexOfFirst {
+		b.indexOfFirst = index
+		b.first = valueToUpdateWith
+	}
+
+	if index := strings.LastIndex(b.line, valueToFind); index >= 0 && index > b.indexOfLast {
+		b.indexOfLast = index
+		b.last = valueToUpdateWith
+	}
+}
+
+func (b *calculationValueBuilder) build() (int, error) {
+	return strconv.Atoi(b.first + b.last)
+}
+
 var digitWordMap = map[string]string{
 	"one":   "1",
 	"two":   "2",
@@ -19,38 +50,20 @@ var digitWordMap = map[string]string{
 }
 
 func getCalculationValue(line string, includeDigitWords bool) (int, error) {
-	var first, last string
-	indexOfFirst, indexOfLast := len(line), -1
+	builder := calculationValueBuilder{}.init(line)
 
 	for i := 0; i < 10; i++ {
 		iAsString := strconv.Itoa(i)
-
-		if index := strings.Index(line, iAsString); index >= 0 && index < indexOfFirst {
-			indexOfFirst = index
-			first = iAsString
-		}
-
-		if index := strings.LastIndex(line, iAsString); index >= 0 && index > indexOfLast {
-			indexOfLast = index
-			last = iAsString
-		}
+		builder.findAndUpdate(iAsString, iAsString)
 	}
 
 	if includeDigitWords {
 		for digitWord, digit := range digitWordMap {
-			if index := strings.Index(line, digitWord); index >= 0 && index < indexOfFirst {
-				indexOfFirst = index
-				first = digit
-			}
-
-			if index := strings.LastIndex(line, digitWord); index >= 0 && index > indexOfLast {
-				indexOfLast = index
-				last = digit
-			}
+			builder.findAndUpdate(digitWord, digit)
 		}
 	}
 
-	return strconv.Atoi(first + last)
+	return builder.build()
 }
 
 func solvePuzzle(lines *bufio.Scanner, includeDigitWords bool) (string, error) {
