@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"strconv"
 	"strings"
+
+	"github.com/AkashV22/advent-of-code-2023-go/puzzle"
 )
 
 type calculationValueBuilder struct {
@@ -49,7 +51,7 @@ var digitWordMap = map[string]string{
 	"nine":  "9",
 }
 
-func getCalculationValue(line string, includeDigitWords bool) (int, error) {
+func getCalculationValue(line string, puzzleNumber puzzle.Number) (int, error) {
 	builder := calculationValueBuilder{}.init(line)
 
 	for i := 0; i < 10; i++ {
@@ -57,7 +59,7 @@ func getCalculationValue(line string, includeDigitWords bool) (int, error) {
 		builder.findAndUpdate(iAsString, iAsString)
 	}
 
-	if includeDigitWords {
+	if puzzleNumber == puzzle.Two {
 		for digitWord, digit := range digitWordMap {
 			builder.findAndUpdate(digitWord, digit)
 		}
@@ -66,11 +68,11 @@ func getCalculationValue(line string, includeDigitWords bool) (int, error) {
 	return builder.build()
 }
 
-func solvePuzzle(lines *bufio.Scanner, includeDigitWords bool) (int, error) {
+func solvePuzzle(lines *bufio.Scanner, puzzleNumber puzzle.Number) (int, error) {
 	sum := 0
 
 	for lines.Scan() {
-		calculationValue, err := getCalculationValue(lines.Text(), includeDigitWords)
+		calculationValue, err := getCalculationValue(lines.Text(), puzzleNumber)
 
 		if err != nil {
 			return 0, err
@@ -82,10 +84,36 @@ func solvePuzzle(lines *bufio.Scanner, includeDigitWords bool) (int, error) {
 	return sum, nil
 }
 
-func SolvePuzzle1(lines *bufio.Scanner) (int, error) {
-	return solvePuzzle(lines, false)
+type puzzleSolver struct{}
+
+func (solver *puzzleSolver) GetDay() int {
+	return 1
 }
 
-func SolvePuzzle2(lines *bufio.Scanner) (int, error) {
-	return solvePuzzle(lines, true)
+func (solver *puzzleSolver) SolvePuzzle(puzzleNumber puzzle.Number, input *bufio.Scanner) (int, error) {
+	sum := 0
+
+	for input.Scan() {
+		calculationValue, err := getCalculationValue(input.Text(), puzzleNumber)
+
+		if err != nil {
+			return 0, err
+		}
+
+		sum += calculationValue
+	}
+
+	return sum, nil
+}
+
+func NewPuzzleSolver() puzzle.Solver {
+	return &puzzleSolver{}
+}
+
+func SolvePuzzle1(input *bufio.Scanner) (int, error) {
+	return solvePuzzle(input, puzzle.One)
+}
+
+func SolvePuzzle2(input *bufio.Scanner) (int, error) {
+	return solvePuzzle(input, puzzle.Two)
 }
