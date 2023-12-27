@@ -21,7 +21,7 @@ func solveAllPuzzles(w http.ResponseWriter, r *http.Request, puzzleSolvers []puz
 		for puzzleNumber := puzzle.FirstNumber(); puzzleNumber.Ok(); puzzleNumber++ {
 			puzzleDay := puzzleSolver.GetDay()
 
-			inputPath := fmt.Sprintf("day%02d/input.txt", puzzleDay)
+			inputPath := fmt.Sprintf("input/%02d.txt", puzzleDay)
 			file, err := os.Open(inputPath)
 			if err != nil {
 				slog.Error("Error opening file.", err)
