@@ -17,13 +17,6 @@ type calculationValueBuilder struct {
 	indexOfLast  int
 }
 
-func (b calculationValueBuilder) init(line string) calculationValueBuilder {
-	b.line = line
-	b.indexOfFirst = math.MaxInt
-	b.indexOfLast = math.MinInt
-	return b
-}
-
 func (b *calculationValueBuilder) findAndUpdate(valueToFind, valueToUpdateWith string) {
 	if index := strings.Index(b.line, valueToFind); index >= 0 && index < b.indexOfFirst {
 		b.indexOfFirst = index
@@ -40,6 +33,14 @@ func (b *calculationValueBuilder) build() (int, error) {
 	return strconv.Atoi(b.first + b.last)
 }
 
+func newCalculationValueBuilder(line string) calculationValueBuilder {
+	return calculationValueBuilder{
+		line:         line,
+		indexOfFirst: math.MaxInt,
+		indexOfLast:  math.MinInt,
+	}
+}
+
 var digitWordMap = map[string]string{
 	"one":   "1",
 	"two":   "2",
@@ -53,7 +54,7 @@ var digitWordMap = map[string]string{
 }
 
 func getCalculationValue(line string, puzzleNumber puzzle.Number) (int, error) {
-	builder := calculationValueBuilder{}.init(line)
+	builder := newCalculationValueBuilder(line)
 
 	for i := 0; i < 10; i++ {
 		iAsString := strconv.Itoa(i)
