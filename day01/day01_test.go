@@ -13,7 +13,7 @@ func TestGetDay(t *testing.T) {
 	expected := 1
 	result := NewPuzzleSolver().GetDay()
 	if expected != result {
-		t.Fatalf("Expected %v, received %v.", expected, result)
+		t.Errorf("Expected %v, received %v.", expected, result)
 	}
 }
 
@@ -31,7 +31,7 @@ func doTestSolvePuzzle(t *testing.T, puzzleNumber puzzle.Number, expected int) {
 	result := NewPuzzleSolver().SolvePuzzle(puzzleNumber, input)
 
 	if expected != result {
-		t.Fatalf("Expected %v, received %v.", expected, result)
+		t.Errorf("Expected %v, received %v.", expected, result)
 	}
 }
 
