@@ -11,13 +11,13 @@ import (
 
 type calculationValueBuilder struct {
 	line         string
-	first        string
-	last         string
+	first        int
+	last         int
 	indexOfFirst int
 	indexOfLast  int
 }
 
-func (b *calculationValueBuilder) findAndUpdate(valueToFind, valueToUpdateWith string) {
+func (b *calculationValueBuilder) findAndUpdate(valueToFind string, valueToUpdateWith int) {
 	if index := strings.Index(b.line, valueToFind); index >= 0 && index < b.indexOfFirst {
 		b.indexOfFirst = index
 		b.first = valueToUpdateWith
@@ -29,8 +29,8 @@ func (b *calculationValueBuilder) findAndUpdate(valueToFind, valueToUpdateWith s
 	}
 }
 
-func (b *calculationValueBuilder) build() (int, error) {
-	return strconv.Atoi(b.first + b.last)
+func (b *calculationValueBuilder) build() int {
+	return (b.first * 10) + b.last
 }
 
 func newCalculationValueBuilder(line string) calculationValueBuilder {
@@ -41,24 +41,23 @@ func newCalculationValueBuilder(line string) calculationValueBuilder {
 	}
 }
 
-var digitWordMap = map[string]string{
-	"one":   "1",
-	"two":   "2",
-	"three": "3",
-	"four":  "4",
-	"five":  "5",
-	"six":   "6",
-	"seven": "7",
-	"eight": "8",
-	"nine":  "9",
+var digitWordMap = map[string]int{
+	"one":   1,
+	"two":   2,
+	"three": 3,
+	"four":  4,
+	"five":  5,
+	"six":   6,
+	"seven": 7,
+	"eight": 8,
+	"nine":  9,
 }
 
-func getCalculationValue(line string, puzzleNumber puzzle.Number) (int, error) {
+func getCalculationValue(line string, puzzleNumber puzzle.Number) int {
 	builder := newCalculationValueBuilder(line)
 
 	for i := 0; i < 10; i++ {
-		iAsString := strconv.Itoa(i)
-		builder.findAndUpdate(iAsString, iAsString)
+		builder.findAndUpdate(strconv.Itoa(i), i)
 	}
 
 	if puzzleNumber == puzzle.Two {
@@ -80,13 +79,7 @@ func (solver *puzzleSolver) SolvePuzzle(puzzleNumber puzzle.Number, input *bufio
 	sum := 0
 
 	for input.Scan() {
-		calculationValue, err := getCalculationValue(input.Text(), puzzleNumber)
-
-		if err != nil {
-			return 0, err
-		}
-
-		sum += calculationValue
+		sum += getCalculationValue(input.Text(), puzzleNumber)
 	}
 
 	return sum, nil
