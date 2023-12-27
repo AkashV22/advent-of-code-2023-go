@@ -68,22 +68,6 @@ func getCalculationValue(line string, puzzleNumber puzzle.Number) (int, error) {
 	return builder.build()
 }
 
-func solvePuzzle(lines *bufio.Scanner, puzzleNumber puzzle.Number) (int, error) {
-	sum := 0
-
-	for lines.Scan() {
-		calculationValue, err := getCalculationValue(lines.Text(), puzzleNumber)
-
-		if err != nil {
-			return 0, err
-		}
-
-		sum += calculationValue
-	}
-
-	return sum, nil
-}
-
 type puzzleSolver struct{}
 
 func (solver *puzzleSolver) GetDay() int {
@@ -108,12 +92,4 @@ func (solver *puzzleSolver) SolvePuzzle(puzzleNumber puzzle.Number, input *bufio
 
 func NewPuzzleSolver() puzzle.Solver {
 	return &puzzleSolver{}
-}
-
-func SolvePuzzle1(input *bufio.Scanner) (int, error) {
-	return solvePuzzle(input, puzzle.One)
-}
-
-func SolvePuzzle2(input *bufio.Scanner) (int, error) {
-	return solvePuzzle(input, puzzle.Two)
 }

@@ -9,27 +9,27 @@ import (
 	"os"
 
 	"github.com/AkashV22/advent-of-code-2023-go/day01"
+	"github.com/AkashV22/advent-of-code-2023-go/puzzle"
 )
 
-type solverInfo struct {
-	day       int
-	puzzle    int
-	inputPath string
-	solver    func(*bufio.Scanner) (int, error)
-}
+func solveAllPuzzles(w http.ResponseWriter, r *http.Request, puzzleSolvers []puzzle.Solver) {
+	slog.Info("Solving all puzzles.")
 
-func solvePuzzles(solvers []solverInfo) func(http.ResponseWriter, *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
+	results := make(map[string]int)
 
-		results := make(map[string]int)
-
-		for _, solverInfo := range solvers {
-			file, err := os.Open(solverInfo.inputPath)
+	for _, puzzleSolver := range puzzleSolvers {
+		for puzzleNumber := puzzle.FirstNumber(); puzzleNumber.Ok(); puzzleNumber++ {
+			inputPath := fmt.Sprintf("day%02d/input.txt", puzzleSolver.GetDay())
+			file, err := os.Open(inputPath)
+			if err != nil {
+				slog.Error("Error opening file.", err)
+				http.Error(w, err.Error(), 500)
+				return
+			}
 			defer file.Close()
 
-			lines := bufio.NewScanner(file)
-
-			result, err := solverInfo.solver(lines)
+			input := bufio.NewScanner(file)
+			result, err := puzzleSolver.SolvePuzzle(puzzleNumber, input)
 
 			if err != nil {
 				slog.Error("Error solving puzzle.", err)
@@ -37,29 +37,32 @@ func solvePuzzles(solvers []solverInfo) func(http.ResponseWriter, *http.Request)
 				return
 			}
 
-			results[fmt.Sprintf("Day %v Puzzle %v", solverInfo.day, solverInfo.puzzle)] = result
+			results[fmt.Sprintf("Day %v Puzzle %v", puzzleSolver.GetDay(), puzzleNumber)] = result
 		}
-
-		resultsJson, err := json.Marshal(results)
-
-		if err != nil {
-			slog.Error("Error mashalling results to JSON.", err)
-			http.Error(w, err.Error(), 500)
-			return
-		}
-
-		w.Write(resultsJson)
-
 	}
+
+	slog.Info("Solved all puzzles.", slog.Int("total", len(results)))
+
+	resultsJson, err := json.Marshal(results)
+
+	if err != nil {
+		slog.Error("Error mashalling results to JSON.", err)
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	w.Write(resultsJson)
 }
 
 func main() {
-	solvers := []solverInfo{
-		{day: 1, puzzle: 1, inputPath: "day01/input.txt", solver: day01.SolvePuzzle1},
-		{day: 1, puzzle: 2, inputPath: "day01/input.txt", solver: day01.SolvePuzzle2},
+	puzzleSolvers := []puzzle.Solver{
+		day01.NewPuzzleSolver(),
 	}
 
-	http.HandleFunc("/", solvePuzzles(solvers))
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		solveAllPuzzles(w, r, puzzleSolvers)
+	})
+
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		slog.Error("Error starting server, exiting...", err)
 		os.Exit(1)
