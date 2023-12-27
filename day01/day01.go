@@ -2,6 +2,7 @@ package day01
 
 import (
 	"bufio"
+	"math"
 	"strconv"
 	"strings"
 
@@ -18,8 +19,8 @@ type calculationValueBuilder struct {
 
 func (b calculationValueBuilder) init(line string) calculationValueBuilder {
 	b.line = line
-	b.indexOfFirst = len(line)
-	b.indexOfLast = -1
+	b.indexOfFirst = math.MaxInt
+	b.indexOfLast = math.MinInt
 	return b
 }
 
