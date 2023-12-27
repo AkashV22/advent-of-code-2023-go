@@ -35,10 +35,18 @@ func doTestSolvePuzzle(t *testing.T, puzzleNumber puzzle.Number, expected int) {
 	}
 }
 
-func TestSolvePuzzle1(t *testing.T) {
-	doTestSolvePuzzle(t, 1, 142)
-}
+func TestSolvePuzzle(t *testing.T) {
+	testCases := [2]struct {
+		puzzleNumber puzzle.Number
+		expected     int
+	}{
+		{puzzleNumber: puzzle.One, expected: 142},
+		{puzzleNumber: puzzle.Two, expected: 281},
+	}
 
-func TestSolvePuzzle2(t *testing.T) {
-	doTestSolvePuzzle(t, 2, 281)
+	for _, tc := range testCases {
+		t.Run(fmt.Sprintf("Puzzle %v", tc.puzzleNumber), func(t *testing.T) {
+			doTestSolvePuzzle(t, tc.puzzleNumber, tc.expected)
+		})
+	}
 }
