@@ -19,7 +19,9 @@ func solveAllPuzzles(w http.ResponseWriter, r *http.Request, puzzleSolvers []puz
 
 	for _, puzzleSolver := range puzzleSolvers {
 		for puzzleNumber := puzzle.FirstNumber(); puzzleNumber.Ok(); puzzleNumber++ {
-			inputPath := fmt.Sprintf("day%02d/input.txt", puzzleSolver.GetDay())
+			puzzleDay := puzzleSolver.GetDay()
+
+			inputPath := fmt.Sprintf("day%02d/input.txt", puzzleDay)
 			file, err := os.Open(inputPath)
 			if err != nil {
 				slog.Error("Error opening file.", err)
@@ -37,7 +39,7 @@ func solveAllPuzzles(w http.ResponseWriter, r *http.Request, puzzleSolvers []puz
 				return
 			}
 
-			results[fmt.Sprintf("Day %v Puzzle %v", puzzleSolver.GetDay(), puzzleNumber)] = result
+			results[fmt.Sprintf("Day %v Puzzle %v", puzzleDay, puzzleNumber)] = result
 		}
 	}
 
