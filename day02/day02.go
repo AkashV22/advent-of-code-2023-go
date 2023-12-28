@@ -10,7 +10,7 @@ import (
 	"github.com/AkashV22/advent-of-code-2023-go/puzzle"
 )
 
-func passThroughValueIfGameIsPossible(cubeSets []string, value int) (int, error) {
+func processCubeSets(cubeSets []string, processCubeTotalAndColour func(int, string) bool) error {
 	for _, cubeSet := range cubeSets {
 		cubes := strings.Split(cubeSet, ", ")
 
@@ -18,45 +18,53 @@ func passThroughValueIfGameIsPossible(cubeSets []string, value int) (int, error)
 			cubeData := strings.Split(cube, " ")
 			total, err := strconv.Atoi(cubeData[0])
 			if err != nil {
-				return 0, err
+				return err
 			}
 
 			colour := cubeData[1]
 
-			if (colour == "red" && total > 12) || (colour == "green" && total > 13) || (colour == "blue" && total > 14) {
-				return 0, nil
+			if returnImmediately := processCubeTotalAndColour(total, colour); returnImmediately {
+				return nil
 			}
 		}
 	}
 
-	return value, nil
+	return nil
+}
+
+func passThroughValueIfGameIsPossible(cubeSets []string, value int) (int, error) {
+	isGamePossible := true
+
+	processCubeSets(cubeSets, func(total int, colour string) bool {
+		if (colour == "red" && total > 12) || (colour == "green" && total > 13) || (colour == "blue" && total > 14) {
+			isGamePossible = false
+			return true
+		}
+
+		return false
+	})
+
+	if isGamePossible {
+		return value, nil
+	}
+	return 0, nil
 }
 
 func calculatePowerOfCubes(cubeSets []string) (int, error) {
 	var maxRedTotal, maxGreenTotal, maxBlueTotal int
 
-	for _, cubeSet := range cubeSets {
-		cubes := strings.Split(cubeSet, ", ")
-
-		for _, cube := range cubes {
-			cubeData := strings.Split(cube, " ")
-			total, err := strconv.Atoi(cubeData[0])
-			if err != nil {
-				return 0, err
-			}
-
-			colour := cubeData[1]
-
-			switch {
-			case colour == "red" && total > maxRedTotal:
-				maxRedTotal = total
-			case colour == "green" && total > maxGreenTotal:
-				maxGreenTotal = total
-			case colour == "blue" && total > maxBlueTotal:
-				maxBlueTotal = total
-			}
+	processCubeSets(cubeSets, func(total int, colour string) bool {
+		switch {
+		case colour == "red" && total > maxRedTotal:
+			maxRedTotal = total
+		case colour == "green" && total > maxGreenTotal:
+			maxGreenTotal = total
+		case colour == "blue" && total > maxBlueTotal:
+			maxBlueTotal = total
 		}
-	}
+
+		return false
+	})
 
 	return maxRedTotal * maxGreenTotal * maxBlueTotal, nil
 }
