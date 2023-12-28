@@ -24,5 +24,5 @@ func FirstNumber() Number {
 type Solver interface {
 	GetDay() int
 
-	SolvePuzzle(puzzleNumber Number, input *bufio.Scanner) int
+	SolvePuzzle(puzzleNumber Number, input *bufio.Scanner) (int, error)
 }

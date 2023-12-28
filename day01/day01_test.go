@@ -28,7 +28,12 @@ func doTestSolvePuzzle(t *testing.T, puzzleNumber puzzle.Number, expected int) {
 
 	input := bufio.NewScanner(file)
 
-	result := NewPuzzleSolver().SolvePuzzle(puzzleNumber, input)
+	var result int
+	result, err = NewPuzzleSolver().SolvePuzzle(puzzleNumber, input)
+
+	if err != nil {
+		t.Fatal("Error solving puzzle.", err)
+	}
 
 	if expected != result {
 		t.Errorf("Expected %v, received %v.", expected, result)

@@ -75,14 +75,14 @@ func (solver *puzzleSolver) GetDay() int {
 	return 1
 }
 
-func (solver *puzzleSolver) SolvePuzzle(puzzleNumber puzzle.Number, input *bufio.Scanner) int {
+func (solver *puzzleSolver) SolvePuzzle(puzzleNumber puzzle.Number, input *bufio.Scanner) (int, error) {
 	sum := 0
 
 	for input.Scan() {
 		sum += getCalculationValue(input.Text(), puzzleNumber)
 	}
 
-	return sum
+	return sum, nil
 }
 
 func NewPuzzleSolver() puzzle.Solver {

@@ -32,7 +32,14 @@ func solveAllPuzzles(w http.ResponseWriter, r *http.Request, puzzleSolvers []puz
 			defer file.Close()
 
 			input := bufio.NewScanner(file)
-			result := puzzleSolver.SolvePuzzle(puzzleNumber, input)
+			result, err := puzzleSolver.SolvePuzzle(puzzleNumber, input)
+
+			if err != nil {
+				slog.Error("Error solving puzzle.", err)
+				http.Error(w, err.Error(), 500)
+				return
+			}
+
 			results[fmt.Sprintf("Day %v Puzzle %v", puzzleDay, puzzleNumber)] = result
 		}
 	}
