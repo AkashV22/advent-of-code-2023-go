@@ -11,5 +11,5 @@ func TestGetDay(t *testing.T) {
 }
 
 func TestSolvePuzzle(t *testing.T) {
-	testutils.TestSolvePuzzle(t, NewPuzzleSolver(), 8, 0)
+	testutils.TestSolvePuzzle(t, NewPuzzleSolver(), false, 8, 0)
 }
