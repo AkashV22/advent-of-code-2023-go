@@ -20,7 +20,7 @@ func solveAllPuzzles(w http.ResponseWriter, r *http.Request, puzzleSolvers []puz
 
 	for _, puzzleSolver := range puzzleSolvers {
 		for puzzleNumber := puzzle.FirstNumber(); puzzleNumber.Ok(); puzzleNumber++ {
-			puzzleDay := puzzleSolver.GetDay()
+			puzzleDay := puzzleSolver.Day()
 
 			inputPath := fmt.Sprintf("input/%02d.txt", puzzleDay)
 			file, err := os.Open(inputPath)

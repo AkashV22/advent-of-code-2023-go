@@ -71,7 +71,7 @@ func getCalculationValue(line string, puzzleNumber puzzle.Number) int {
 
 type puzzleSolver struct{}
 
-func (solver *puzzleSolver) GetDay() int {
+func (solver *puzzleSolver) Day() int {
 	return 1
 }
 

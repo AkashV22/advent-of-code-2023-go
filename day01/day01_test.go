@@ -6,8 +6,8 @@ import (
 	"github.com/AkashV22/advent-of-code-2023-go/puzzletest"
 )
 
-func TestGetDay(t *testing.T) {
-	puzzletest.TestGetDay(t, NewPuzzleSolver(), 1)
+func TestDay(t *testing.T) {
+	puzzletest.TestDay(t, NewPuzzleSolver(), 1)
 }
 
 func TestSolvePuzzle(t *testing.T) {

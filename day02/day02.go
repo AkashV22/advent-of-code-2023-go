@@ -71,7 +71,7 @@ func calculatePowerOfCubes(cubeSets []string) (int, error) {
 
 type puzzleSolver struct{}
 
-func (solver *puzzleSolver) GetDay() int {
+func (solver *puzzleSolver) Day() int {
 	return 2
 }
 

@@ -9,8 +9,8 @@ import (
 	"github.com/AkashV22/advent-of-code-2023-go/puzzle"
 )
 
-func TestGetDay(t *testing.T, puzzleSolver puzzle.Solver, expected int) {
-	result := puzzleSolver.GetDay()
+func TestDay(t *testing.T, puzzleSolver puzzle.Solver, expected int) {
+	result := puzzleSolver.Day()
 	if expected != result {
 		t.Errorf("Expected %v, received %v.", expected, result)
 	}
