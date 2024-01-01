@@ -6,10 +6,15 @@ import (
 	"github.com/AkashV22/advent-of-code-2023-go/puzzletest"
 )
 
-func TestDay(t *testing.T) {
-	puzzletest.TestDay(t, NewPuzzleSolver(), 2)
-}
+func TestPuzzleSolver(t *testing.T) {
+	test := puzzletest.PuzzleSolverTest{
+		T:                       t,
+		NewPuzzleSolver:         NewPuzzleSolver,
+		MultipleInputFiles:      false,
+		ExpectedDay:             2,
+		ExpectedPuzzleOneResult: 8,
+		ExpectedPuzzleTwoResult: 2286,
+	}
 
-func TestSolvePuzzle(t *testing.T) {
-	puzzletest.TestSolvePuzzle(t, NewPuzzleSolver(), false, 8, 2286)
+	test.Run()
 }
