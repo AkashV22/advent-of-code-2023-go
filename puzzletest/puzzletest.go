@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"testing"
 
 	"github.com/AkashV22/advent-of-code-2023-go/puzzle"
@@ -16,7 +17,14 @@ func TestDay(t *testing.T, puzzleSolver puzzle.Solver, expected int) {
 	}
 }
 
-func doTestSolvePuzzle(t *testing.T, puzzleSolver puzzle.Solver, multipleInputFiles bool, puzzleNumber puzzle.Number, expected int) {
+type solvePuzzleTestCase struct {
+	puzzleNumber puzzle.Number
+	expected     int
+}
+
+func (tc solvePuzzleTestCase) run(t *testing.T, puzzleSolver puzzle.Solver, multipleInputFiles bool) {
+	puzzleNumber := tc.puzzleNumber
+
 	var inputPath string
 	if multipleInputFiles {
 		inputPath = fmt.Sprintf("example%v.txt", puzzleNumber)
@@ -40,23 +48,20 @@ func doTestSolvePuzzle(t *testing.T, puzzleSolver puzzle.Solver, multipleInputFi
 		t.Fatal("Error solving puzzle.", err)
 	}
 
-	if expected != result {
+	if expected := tc.expected; expected != result {
 		t.Errorf("Expected %v, received %v.", expected, result)
 	}
 }
 
 func TestSolvePuzzle(t *testing.T, puzzleSolver puzzle.Solver, multipleInputFiles bool, puzzleOneExpected int, puzzleTwoExpected int) {
-	testCases := [2]struct {
-		puzzleNumber puzzle.Number
-		expected     int
-	}{
+	testCases := [2]solvePuzzleTestCase{
 		{puzzleNumber: puzzle.One, expected: puzzleOneExpected},
 		{puzzleNumber: puzzle.Two, expected: puzzleTwoExpected},
 	}
 
 	for _, tc := range testCases {
-		t.Run(fmt.Sprintf("Puzzle %v", tc.puzzleNumber), func(t *testing.T) {
-			doTestSolvePuzzle(t, puzzleSolver, multipleInputFiles, tc.puzzleNumber, tc.expected)
+		t.Run(strconv.Itoa(int(tc.puzzleNumber)), func(t *testing.T) {
+			tc.run(t, puzzleSolver, multipleInputFiles)
 		})
 	}
 }
