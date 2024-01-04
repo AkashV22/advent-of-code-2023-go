@@ -10,32 +10,19 @@ import (
 	"github.com/AkashV22/advent-of-code-2023-go/puzzle"
 )
 
-type testCase interface {
-	name() string
-
-	run(t *testing.T, puzzleSolver puzzle.Solver)
-}
-
-type dayTestCase int
-
-func (tc dayTestCase) name() string {
-	return "Day"
-}
-
-func (tc dayTestCase) run(t *testing.T, puzzleSolver puzzle.Solver) {
-	expected := int(tc)
+func testDay(t *testing.T, puzzleSolver puzzle.Solver, expected int) {
 	result := puzzleSolver.Day()
 	if expected != result {
 		t.Errorf("Expected %v, received %v.", expected, result)
 	}
 }
 
-type solvePuzzleSubTestCase struct {
+type solvePuzzleTestCase struct {
 	puzzleNumber puzzle.Number
 	expected     int
 }
 
-func (tc solvePuzzleSubTestCase) run(t *testing.T, puzzleSolver puzzle.Solver, multipleInputFiles bool) {
+func (tc solvePuzzleTestCase) run(t *testing.T, puzzleSolver puzzle.Solver, multipleInputFiles bool) {
 	puzzleNumber := tc.puzzleNumber
 
 	var inputPath string
@@ -66,25 +53,22 @@ func (tc solvePuzzleSubTestCase) run(t *testing.T, puzzleSolver puzzle.Solver, m
 	}
 }
 
-type solvePuzzleTestCase struct {
+type solvePuzzleSubTest struct {
+	puzzleSolver            puzzle.Solver
 	multipleInputFiles      bool
 	expectedPuzzleOneResult int
 	expectedPuzzleTwoResult int
 }
 
-func (tc solvePuzzleTestCase) name() string {
-	return "SolvePuzzle"
-}
-
-func (tc solvePuzzleTestCase) run(t *testing.T, puzzleSolver puzzle.Solver) {
-	subTestCases := [2]solvePuzzleSubTestCase{
-		{puzzleNumber: puzzle.One, expected: tc.expectedPuzzleOneResult},
-		{puzzleNumber: puzzle.Two, expected: tc.expectedPuzzleTwoResult},
+func (test solvePuzzleSubTest) run(t *testing.T) {
+	testCases := [2]solvePuzzleTestCase{
+		{puzzleNumber: puzzle.One, expected: test.expectedPuzzleOneResult},
+		{puzzleNumber: puzzle.Two, expected: test.expectedPuzzleTwoResult},
 	}
 
-	for _, subTc := range subTestCases {
-		t.Run(strconv.Itoa(int(subTc.puzzleNumber)), func(t *testing.T) {
-			subTc.run(t, puzzleSolver, tc.multipleInputFiles)
+	for _, tc := range testCases {
+		t.Run(strconv.Itoa(int(tc.puzzleNumber)), func(t *testing.T) {
+			tc.run(t, test.puzzleSolver, test.multipleInputFiles)
 		})
 	}
 }
@@ -99,20 +83,20 @@ type PuzzleSolverTest struct {
 }
 
 func (test PuzzleSolverTest) Run() {
-	testCases := [2]testCase{
-		dayTestCase(test.ExpectedDay),
-		solvePuzzleTestCase{
+	puzzleSolver := test.NewPuzzleSolver()
+
+	test.T.Run("Day", func(t *testing.T) {
+		testDay(t, puzzleSolver, test.ExpectedDay)
+	})
+
+	test.T.Run("SolvePuzzle", func(t *testing.T) {
+		solvePuzzleSubTest := solvePuzzleSubTest{
+			puzzleSolver:            puzzleSolver,
 			multipleInputFiles:      test.MultipleInputFiles,
 			expectedPuzzleOneResult: test.ExpectedPuzzleOneResult,
 			expectedPuzzleTwoResult: test.ExpectedPuzzleTwoResult,
-		},
-	}
+		}
 
-	puzzleSolver := test.NewPuzzleSolver()
-
-	for _, tc := range testCases {
-		test.T.Run(tc.name(), func(t *testing.T) {
-			tc.run(t, puzzleSolver)
-		})
-	}
+		solvePuzzleSubTest.run(t)
+	})
 }
