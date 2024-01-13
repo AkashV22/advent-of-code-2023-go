@@ -11,7 +11,6 @@ func TestPuzzleSolver(t *testing.T) {
 	test := puzzletest.PuzzleSolverTest{
 		T:                       t,
 		NewPuzzleSolver:         day02.NewPuzzleSolver,
-		MultipleInputFiles:      false,
 		ExpectedDay:             2,
 		ExpectedPuzzleOneResult: 8,
 		ExpectedPuzzleTwoResult: 2286,

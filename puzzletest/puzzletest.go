@@ -22,17 +22,10 @@ type solvePuzzleTestCase struct {
 	expected     int
 }
 
-func (tc solvePuzzleTestCase) run(t *testing.T, puzzleSolver puzzle.Solver, multipleInputFiles bool) {
+func (tc solvePuzzleTestCase) run(t *testing.T, puzzleSolver puzzle.Solver) {
 	puzzleNumber := tc.puzzleNumber
 
-	var inputPath string
-	if multipleInputFiles {
-		inputPath = fmt.Sprintf("example%v.txt", puzzleNumber)
-	} else {
-		inputPath = "example.txt"
-	}
-
-	file, err := os.Open(inputPath)
+	file, err := os.Open(fmt.Sprintf("example%v.txt", puzzleNumber))
 	defer file.Close()
 
 	if err != nil {
@@ -55,7 +48,6 @@ func (tc solvePuzzleTestCase) run(t *testing.T, puzzleSolver puzzle.Solver, mult
 
 type solvePuzzleSubTest struct {
 	puzzleSolver            puzzle.Solver
-	multipleInputFiles      bool
 	expectedPuzzleOneResult int
 	expectedPuzzleTwoResult int
 }
@@ -68,7 +60,7 @@ func (test solvePuzzleSubTest) run(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(strconv.Itoa(int(tc.puzzleNumber)), func(t *testing.T) {
-			tc.run(t, test.puzzleSolver, test.multipleInputFiles)
+			tc.run(t, test.puzzleSolver)
 		})
 	}
 }
@@ -76,7 +68,6 @@ func (test solvePuzzleSubTest) run(t *testing.T) {
 type PuzzleSolverTest struct {
 	T                       *testing.T
 	NewPuzzleSolver         func() puzzle.Solver
-	MultipleInputFiles      bool
 	ExpectedDay             int
 	ExpectedPuzzleOneResult int
 	ExpectedPuzzleTwoResult int
@@ -92,7 +83,6 @@ func (test PuzzleSolverTest) Run() {
 	test.T.Run("SolvePuzzle", func(t *testing.T) {
 		solvePuzzleSubTest := solvePuzzleSubTest{
 			puzzleSolver:            puzzleSolver,
-			multipleInputFiles:      test.MultipleInputFiles,
 			expectedPuzzleOneResult: test.ExpectedPuzzleOneResult,
 			expectedPuzzleTwoResult: test.ExpectedPuzzleTwoResult,
 		}
