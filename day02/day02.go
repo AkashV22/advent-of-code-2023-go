@@ -92,11 +92,11 @@ func (solver *puzzleSolver) SolvePuzzle(puzzleNumber puzzle.Number, input *bufio
 
 		var handleCubeSets func([]string) (int, error)
 		switch puzzleNumber {
-		case puzzle.One:
+		case puzzle.NumberOne:
 			handleCubeSets = func(cubeSets []string) (int, error) {
 				return passThroughValueIfGameIsPossible(cubeSets, id)
 			}
-		case puzzle.Two:
+		case puzzle.NumberTwo:
 			handleCubeSets = calculatePowerOfCubes
 		default:
 			return 0, errors.New(fmt.Sprintf("Invalid puzzle number: %v.", puzzleNumber))

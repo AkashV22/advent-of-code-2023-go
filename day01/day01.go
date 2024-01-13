@@ -60,7 +60,7 @@ func getCalculationValue(line string, puzzleNumber puzzle.Number) int {
 		builder.findAndUpdate(strconv.Itoa(i), i)
 	}
 
-	if puzzleNumber == puzzle.Two {
+	if puzzleNumber == puzzle.NumberTwo {
 		for digitWord, digit := range digitWordMap {
 			builder.findAndUpdate(digitWord, digit)
 		}

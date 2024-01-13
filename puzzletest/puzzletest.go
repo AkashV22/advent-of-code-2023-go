@@ -62,8 +62,8 @@ type solvePuzzleSubTest struct {
 
 func (test solvePuzzleSubTest) run(t *testing.T) {
 	testCases := [2]solvePuzzleTestCase{
-		{puzzleNumber: puzzle.One, expected: test.expectedPuzzleOneResult},
-		{puzzleNumber: puzzle.Two, expected: test.expectedPuzzleTwoResult},
+		{puzzleNumber: puzzle.NumberOne, expected: test.expectedPuzzleOneResult},
+		{puzzleNumber: puzzle.NumberTwo, expected: test.expectedPuzzleTwoResult},
 	}
 
 	for _, tc := range testCases {

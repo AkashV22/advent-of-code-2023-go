@@ -6,19 +6,19 @@ type Number int
 
 func (number Number) Ok() bool {
 	switch number {
-	case One, Two:
+	case NumberOne, NumberTwo:
 		return true
 	}
 	return false
 }
 
 const (
-	One Number = iota + 1
-	Two
+	NumberOne Number = iota + 1
+	NumberTwo
 )
 
 func FirstNumber() Number {
-	return One
+	return NumberOne
 }
 
 type Solver interface {
