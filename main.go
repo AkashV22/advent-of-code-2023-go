@@ -10,6 +10,7 @@ import (
 
 	"github.com/AkashV22/advent-of-code-2023-go/day01"
 	"github.com/AkashV22/advent-of-code-2023-go/day02"
+	"github.com/AkashV22/advent-of-code-2023-go/day03"
 	"github.com/AkashV22/advent-of-code-2023-go/puzzle"
 )
 
@@ -61,6 +62,7 @@ func main() {
 	puzzleSolvers := []puzzle.Solver{
 		day01.NewPuzzleSolver(),
 		day02.NewPuzzleSolver(),
+		day03.NewPuzzleSolver(),
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
