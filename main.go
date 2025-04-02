@@ -34,7 +34,7 @@ func slogError(err error) slog.Attr {
 	return slog.Any("err", slogErrorValue{err})
 }
 
-func solveAllPuzzles(w http.ResponseWriter, r *http.Request, puzzleSolvers []puzzle.Solver) {
+func solveAllPuzzles(w http.ResponseWriter, puzzleSolvers []puzzle.Solver) {
 	slog.Info("Solving all puzzles.")
 
 	results := make(map[string]int)
@@ -86,7 +86,7 @@ func main() {
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		solveAllPuzzles(w, r, puzzleSolvers)
+		solveAllPuzzles(w, puzzleSolvers)
 	})
 
 	if err := http.ListenAndServe(":8080", nil); err != nil {
