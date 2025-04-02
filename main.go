@@ -15,7 +15,7 @@ import (
 )
 
 func slogError(err error) slog.Attr {
-	return slog.Any("err", err.Error())
+	return slog.String("err", err.Error())
 }
 
 func solveAllPuzzles(w http.ResponseWriter, puzzleSolvers []puzzle.Solver) {
