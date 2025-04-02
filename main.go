@@ -7,7 +7,6 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
-	"runtime"
 
 	"github.com/AkashV22/advent-of-code-2023-go/day01"
 	"github.com/AkashV22/advent-of-code-2023-go/day02"
@@ -15,23 +14,8 @@ import (
 	"github.com/AkashV22/advent-of-code-2023-go/puzzle"
 )
 
-type slogErrorValue struct {
-	err error
-}
-
-// Taken from https://github.com/golang/go/issues/63547#issuecomment-2370591588
-func (err slogErrorValue) LogValue() slog.Value {
-	stack := make([]byte, 4096)
-	n := runtime.Stack(stack, false)
-
-	return slog.GroupValue(
-		slog.String("Error", err.err.Error()),
-		slog.String("Stack", fmt.Sprintf("%s", stack[:n])),
-	)
-}
-
 func slogError(err error) slog.Attr {
-	return slog.Any("err", slogErrorValue{err})
+	return slog.Any("err", err.Error())
 }
 
 func solveAllPuzzles(w http.ResponseWriter, puzzleSolvers []puzzle.Solver) {
